@@ -8,10 +8,10 @@ namespace Training.Domain
 {
     public abstract class Product:RootId
     {
-        public string Name;
-        public string Description;
-        public long Price;
-        public bool IsActive;
-        public string ProductType;
+        public string? Name { set; get; }
+        public string? Description { set; get; }
+        public long Price { set; get; }
+        public bool IsActive { set; get; }
+        public string? ProductType { set; get; }
     }
 }

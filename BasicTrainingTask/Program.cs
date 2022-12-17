@@ -5,6 +5,7 @@ public class Program
 {
     private static void Main(string[] args)
     {
+        //Defining default value for Deals and Activity
         List<Deal> ListOfDeals = new List<Deal>();
         List<Activity> ListOfActivity = new List<Activity>();
 
