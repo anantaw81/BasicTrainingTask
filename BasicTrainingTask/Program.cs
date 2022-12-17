@@ -20,6 +20,11 @@ public class Program
         //Creating cart
         List<Product> Cart = new List<Product>();
 
+        static string ReadWrite(string args)
+        {
+            Console.Write(args);
+            return (Console.ReadLine());
+        }
 
         bool loopingOver = true;
         string Choice = "";
@@ -36,10 +41,28 @@ public class Program
             Choice = Console.ReadLine();
             Console.WriteLine();
 
-            if (Choice == "1")
-            {
-                
-            }else if (Choice == "2")
+            if (Choice == "1") {
+                Console.WriteLine("Which Product You Wanna Create?");
+                Console.WriteLine("1. Deals");
+                Console.WriteLine("2. Activity");
+                Console.Write("Enter Your Choice: ");
+                var ProductCreateNumber = Console.ReadLine();
+                Console.WriteLine();
+                if(ProductCreateNumber == "1")
+                {
+                    ListOfDeals.Add(new Deal(ReadWrite("Id of Deals: "), ReadWrite("Name of Deals: "), ReadWrite("Desc of Deals: "), int.Parse(ReadWrite("Price of Deals: "))));
+                    Console.WriteLine("Successfully Created");
+                }else if(ProductCreateNumber == "2")
+                {
+                    ListOfActivity.Add(new Activity(ReadWrite("Id of Activity: "), ReadWrite("Name of Activity: "), ReadWrite("Desc of Activity: "), int.Parse(ReadWrite("Price of Activity: "))));
+                    Console.WriteLine("Successfully Created");
+                }
+                else
+                {
+                    Console.WriteLine("Wrong Selected Number");
+                }
+            }
+            else if (Choice == "2")
             {
                 string ProductChoice = "";
                 Console.WriteLine("Which Product You Wanna Add?");
@@ -51,11 +74,10 @@ public class Program
 
                 if (ProductChoice == "1")
                 {
-                    int number = 1;
                     string ProductNumber = "";
                     ListOfDeals.ForEach(item =>
                     {
-                        Console.Write($"{number++}. ");
+                        Console.Write($"{item.Id.Split("-")[1]}. ");
                         Console.WriteLine(item.Name);
                     });
 
@@ -63,47 +85,47 @@ public class Program
                     ProductNumber = Console.ReadLine();
 
                     var SelectedDeals = ListOfDeals.First(item => item.Id.Split("-")[1] == ProductNumber);
-                    Cart.Add(SelectedDeals);    
-
-                    ListOfDeals.ForEach(item =>
-                    {
-                        if (item.Id.Split("-")[1] == ProductNumber)
-                        {
-                            Cart.Add(item);
-                            Console.WriteLine($"{item.Name} successfully added");
-                        }
-                    });
+                    Cart.Add(SelectedDeals);
+                    Console.WriteLine($"{SelectedDeals.Name} successfully added");
 
                 }
                 else if(ProductChoice == "2")
                 {
-                    int number = 1;
                     string ProductNumber = "";
                     ListOfActivity.ForEach(item =>
                     {
-                        Console.Write($"{number++}. ");
+                        Console.Write($"{item.Id.Split("-")[1]}. ");
                         Console.WriteLine(item.Name);
                     });
 
                     Console.Write("Select Number Activity You Wanna Add To: ");
                     ProductNumber = Console.ReadLine();
 
-                    ListOfActivity.ForEach(item =>
-                    {
-                        if (item.Id.Split("-")[1] == ProductNumber)
-                        {
-                            Cart.Add(item);
-                            Console.WriteLine($"{item.Name} successfully added");
-                        }
-                    });
-
+                    var SelectedActivity = ListOfActivity.First(item => item.Id.Split("-")[1] == ProductNumber);
+                    Cart.Add(SelectedActivity);
+                    Console.WriteLine($"{SelectedActivity.Name} successfully added");
+                }else
+                {
+                    Console.WriteLine("Wrong Selected Number");
                 }
 
             }
             else if (Choice == "3")
-            { 
-                
-            }else if (Choice == "4")
+            {
+
+                int number = 1;
+                Cart.ForEach(item =>
+                {
+                    Console.Write($"{number++}. ");
+                    Console.WriteLine($"{item.Id} | {item.Name}");
+                });
+                Console.Write("Select Number Cart You Wanna Delete: ");
+                var CartNumber = Console.ReadLine();
+
+                Cart.RemoveAt(int.Parse(CartNumber)-1);
+
+            }
+            else if (Choice == "4")
             {
                 Cart.ForEach(item =>
                 {
@@ -113,6 +135,10 @@ public class Program
             else if (Choice == "5")
             {
                 return;
+            }
+            else
+            {
+                Console.WriteLine("Wrong Selected Number");
             }
 
 
