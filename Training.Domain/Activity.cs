@@ -9,7 +9,7 @@ namespace Training.Domain
 {
     public class Activity: Product
     {
-        public Activity(string Id, string Name = "", string Desc = "" , int Price = 0, bool IsActive = true)
+        public Activity(string Id, string Name = "", string Desc = "" , int Price = 0, bool IsActive = true, int Quantity = 0)
         {
             if (Id is null)
             {
@@ -22,6 +22,7 @@ namespace Training.Domain
             this.Price = Price;
             this.IsActive = IsActive;
             this.ProductType = "Activity";
+            this.Quantity = Quantity;
         }
     }
 }

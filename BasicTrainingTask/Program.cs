@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Training.Domain;
 
 public class Program
@@ -9,40 +10,68 @@ public class Program
         List<Deal> ListOfDeals = new List<Deal>();
         List<Activity> ListOfActivity = new List<Activity>();
 
-        ListOfDeals.Add(new Deal("1", "Bali Snorkling", "Vacation in Bali with Snorkling", 2000));
-        ListOfDeals.Add(new Deal("2", "Australia", "Vacation in Aussie", 1000));
-        ListOfDeals.Add(new Deal("3", "Sunset in Nusa Penida", "Why must Lost in Work? When you could enjoy your vacation", 5000));
+        ListOfDeals.Add(new Deal("1", "Bali Snorkling", "Vacation in Bali with Snorkling", 2000, true ,20));
+        ListOfDeals.Add(new Deal("2", "Australia", "Vacation in Aussie", 1000, true, 30));
+        ListOfDeals.Add(new Deal("3", "Sunset in Nusa Penida", "Why must Lost in Work? When you could enjoy your vacation", 5000, true, 40));
 
-        ListOfActivity.Add(new Activity("1", "Bali Snorkling", "Vacation in Bali with Snorkling", 2000));
-        ListOfActivity.Add(new Activity("2", "Australia", "Vacation in Aussie", 1000));
-        ListOfActivity.Add(new Activity("3", "Sunset in Nusa Penida", "Why must Lost in Work? When you could enjoy your vacation", 5000));
+        ListOfActivity.Add(new Activity("1", "Bali Snorkling", "Vacation in Bali with Snorkling", 2000), true, 10);
+        ListOfActivity.Add(new Activity("2", "Australia", "Vacation in Aussie", 1000, true, 20));
+        ListOfActivity.Add(new Activity("3", "Sunset in Nusa Penida", "Why must Lost in Work? When you could enjoy your vacation", 5000, true, 20));
 
 
         //Creating cart
         List<Product> Cart = new List<Product>();
+
+        //Creating SalesOrder
+        List<SalesOrder> SalesOrders = new List<SalesOrder>();
+
+        SalesOrders.Add(new SalesOrder
+        {
+            Id = "1",
+            CartOrder = new List<Product>(){ ListOfDeals[1], ListOfDeals[2], ListOfActivity[1], ListOfActivity[2] },
+            Status = "Draft",
+            TotalPrice = 20000
+        });
 
         static string ReadWrite(string args)
         {
             Console.Write(args);
             return (Console.ReadLine());
         }
-
+        int salesOrderId = 3;
         bool loopingOver = true;
         string Choice = "";
         while (loopingOver)
         {
             Console.WriteLine();
             Console.WriteLine("Wellcome to Store");
+            Console.WriteLine("0. Show Product");
             Console.WriteLine("1. Create Product");
             Console.WriteLine("2. Add Cart");
             Console.WriteLine("3. Remove from Cart");
             Console.WriteLine("4. Show Carts");
-            Console.WriteLine("5. Exit");
+            Console.WriteLine("5. Checkout");
+            Console.WriteLine("6. Show Sales Order Document");
+            Console.WriteLine("7. Select One To Pay");
+            Console.WriteLine("8. Exit");
             Console.Write("Enter Your Choice: ");
             Choice = Console.ReadLine();
             Console.WriteLine();
 
-            if (Choice == "1") {
+            if (Choice == "0")
+            {
+                Console.WriteLine("List of Deals");
+                ListOfDeals.ForEach(item =>
+                {
+                    Console.WriteLine($"{item.Id} | {item.ProductType} | {item.Name} | {item.Description} | {item.Price} | {item.Quantity} | {item.IsActive} ");
+                });
+                Console.WriteLine("List of Activity");
+                ListOfActivity.ForEach(item =>
+                {
+                    Console.WriteLine($"{item.Id} | {item.ProductType}  | {item.Name} | {item.Description} | {item.Price} | {item.Quantity} | {item.IsActive} ");
+                });
+            }
+            else if (Choice == "1") {
                 Console.WriteLine("Which Product You Wanna Create?");
                 Console.WriteLine("1. Deals");
                 Console.WriteLine("2. Activity");
@@ -130,10 +159,52 @@ public class Program
             {
                 Cart.ForEach(item =>
                 {
-                    Console.WriteLine($"{item.Id} | {item.Name}");
+                    Console.WriteLine($"{item.Id} | {item.Name} | {item.Description} | {item.ProductType} | {item.Price}");
                 });
+            }else if (Choice == "5")
+            {
+                SalesOrders.Add(new SalesOrder
+                {
+                    Id = salesOrderId++.ToString(),
+                    CartOrder = Cart,
+                    Status = "Draft",
+                    TotalPrice = Cart.Sum(x => x.Price)
+                });
+                Cart.Clear();
+
+            }else if (Choice == "6")
+            {
+                Console.WriteLine();
+                SalesOrders.ForEach(item =>
+                {
+                    Console.WriteLine($"{item.Id} | {item.Status} | {item.TotalPrice}");
+                });
+            }else if (Choice == "7")
+            {
+                Console.WriteLine();
+                SalesOrders.ForEach(item =>
+                {
+                    Console.WriteLine($"{item.Id} | {item.Status} | {item.TotalPrice}");
+                });
+                Console.Write("Select Number Id You Want To Pay: ");
+                var SalesOrderNumber = Console.ReadLine();
+
+                var SelectedSalesOrder = SalesOrders.First(item => item.Id.Split("-")[1] == SalesOrderNumber);
+                SelectedSalesOrder.Status = "Done";
+                SelectedSalesOrder.CartOrder.ForEach(item =>
+                {
+                    if (item.ProductType == "Deal")
+                    {
+                        var getDeals = ListOfDeals.First(x => x.Id == item.Id).Quantity--;
+                    }
+                    else if (item.ProductType == "Activity")
+                    {
+                        ListOfActivity.First(x => x.Id == item.Id).Quantity--;
+                    }
+                });
+                Console.WriteLine("Paid Successfully");
             }
-            else if (Choice == "5")
+            else if (Choice == "8")
             {
                 return;
             }
@@ -143,71 +214,9 @@ public class Program
             }
 
 
+
         }
 
-
-        //var baliHoliday = new Deal
-        //{
-        //    Id = "1",
-        //    Name= "Bali",
-        //    Description="How is your holiday ? Stuck on the mind. Get your vacation to Bali with more beautiful and refreshing activities",
-        //    Price= 2000,
-        //    isActive= true,
-        //};
-
-
-
-        var baliHolidays = new Deal("1", "Bali", "How is your holiday ? Stuck on the mind.Get your vacation to Bali with more beautiful and refreshing activities", 2000);
-        Console.WriteLine(baliHolidays.Id);
-
-
-        //var aussieHoliday = new Deal
-        //{
-        //    Id = "2",
-        //    Name= "Australia",
-        //    Description="With Australia, you can see more than you get. Life would be more easier, the get more dramatic of this",
-        //    Price=3000,
-        //    isActive= true,
-        //};
-
-        //var singapuraHoliday = new Activity
-        //{
-        //    Id = "3",
-        //    Name = "Singapura",
-        //    Description = "Visit Singapore, with more of more clean, but high price. But, if you order in this, you could get more",
-        //    Price = 10000,
-        //    isActive = true,
-        //};
-
-        //var baliSurfingHoliday = new Surfing
-        //{
-        //    Id = "4",
-        //    Name = "Bali Surfing",
-        //    Description = "Bali Surfing Holiday",
-        //    Price = 7000,
-        //    isActive = true,
-        //    beachName = "Kuta",
-        //    surfingTime = 2
-        //};
-
-        //Activity surfingDo = baliSurfingHoliday;
-        //Console.WriteLine( surfingDo.Name);
-        //Surfing surfingDon = (Surfing) surfingDo;
-        //Console.WriteLine( surfingDon.beachName);
-
- 
-
-        //List<Product> dealList = new List<Product>();
-        //dealList.Add(aussieHoliday);
-        //dealList.Add(baliHoliday);
-        //dealList.Add(singapuraHoliday);
-        //dealList.Add(baliSurfingHoliday);
-
-
-        //dealList.ForEach(a =>
-        //{
-        //    Console.WriteLine(a.Name);
-        //});
 
         Console.WriteLine("Hello, World!");
     }

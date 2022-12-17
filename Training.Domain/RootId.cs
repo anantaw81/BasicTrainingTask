@@ -8,6 +8,6 @@ namespace Training.Domain
 {
     public abstract class RootId
     {
-        public string Id { set; get; }
+        public string? Id { set; get; }
     }
 }

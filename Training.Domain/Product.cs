@@ -10,8 +10,10 @@ namespace Training.Domain
     {
         public string? Name { set; get; }
         public string? Description { set; get; }
-        public long Price { set; get; }
+        public int Price { set; get; }
         public bool IsActive { set; get; }
         public string? ProductType { set; get; }
+        public int Quantity { set; get; }
+       
     }
 }
