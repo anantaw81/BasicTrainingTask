@@ -9,6 +9,7 @@ namespace Training.Domain
 {
     public class Activity: Product
     {
+        int durationHours { get; set; }
         public Activity(string Id, string Name = "", string Desc = "" , int Price = 0, bool IsActive = true, int Quantity = 0)
         {
             if (Id is null)

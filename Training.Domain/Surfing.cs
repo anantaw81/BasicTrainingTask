@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace Training.Domain
 {
+
+    // no needs. Not Implemented Yet
     public class Surfing: Activity
     {
         public int surfingTime;

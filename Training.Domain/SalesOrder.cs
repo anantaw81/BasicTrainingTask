@@ -19,7 +19,7 @@ namespace Training.Domain
                 _id = $"SalesOrder-{value}";
 
             }}
-        public List<Product>? CartOrder { get; set; }
+        public List<Cart>? CartOrder { get; set; }
         public string? Status { get; set; }
         public int TotalPrice { get; set; }
     }
